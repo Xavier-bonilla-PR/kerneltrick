@@ -96,7 +96,9 @@ def generate_queries(intent: str, n: int) -> list:
         text = text.split("```")[1]
         if text.startswith("json"):
             text = text[4:]
-    queries = json.loads(text.strip())
+    text = text.strip()
+    # Use raw_decode so trailing content (extra arrays, prose) is ignored
+    queries, _ = json.JSONDecoder().raw_decode(text)
     assert len(queries) == n, f"Expected {n}, got {len(queries)}"
     return queries
 
